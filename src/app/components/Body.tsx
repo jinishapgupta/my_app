@@ -1,24 +1,23 @@
-import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
 import Cards from "./RestaurantCards/Cards";
+
+// Dynamically import MapView with SSR disabled
+const MapView = dynamic(() => import("./MapView"), { ssr: false });
 
 interface BodyProps {
   filters: any;
   data: any;
-  metaData: { area: string }; // Added metaData type with area
+  metaData: { area: string };
   setCountsMetaData: (countsMetaData: any) => void;
-}
-interface filtersProps {
-  availability: boolean;
-  rating: number;
-  deliveryTime: number;
-  deliveryCost: number;
-  cuisines: string[];
 }
 
 export default function Body({ data, filters, metaData, setCountsMetaData }: BodyProps) {
+  const [showMap, setShowMap] = useState(false);
+
   useEffect(() => {
     const countsMetaData = {
-      area: metaData.area, // Include area from metaData
+      area: metaData.area,
       availability: data.filter(
         (restaurant: any) => restaurant.availability?.delivery?.isOpen
       ).length,
@@ -43,14 +42,14 @@ export default function Body({ data, filters, metaData, setCountsMetaData }: Bod
     };
 
     setCountsMetaData(countsMetaData);
-  }, [data, metaData, setCountsMetaData]); // Added metaData to dependency array
+  }, [data, metaData, setCountsMetaData]);
 
   const restaurants = data
     .filter((restaurant: any) => {
       if (!filters || Object.keys(filters).length === 0) {
         return true;
       }
-      const restaurantFilters = restaurant.filters as filtersProps;
+      const restaurantFilters = restaurant.filters;
       const availability = restaurant.availability?.delivery?.isOpen || false;
       const starRating = restaurantFilters.rating || 0;
 
@@ -84,8 +83,18 @@ export default function Body({ data, filters, metaData, setCountsMetaData }: Bod
     .slice(0, 10);
 
   return (
-    <div className="flex-1 flex items-center justify-center">
-      <Cards restaurants={restaurants} />
+    <div className="flex-1 flex flex-col items-center justify-center">
+      <button
+        onClick={() => setShowMap(!showMap)}
+        className="mb-4 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition"
+      >
+        {showMap ? "Show Cards" : "Show Map"}
+      </button>
+      {showMap ? (
+        <MapView restaurants={restaurants} />
+      ) : (
+        <Cards restaurants={restaurants} />
+      )}
     </div>
   );
 }
