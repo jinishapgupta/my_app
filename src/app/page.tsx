@@ -8,6 +8,14 @@ export default function Home() {
   const [postcode, setPostcode] = useState("DH4 5QZ");
   const [data, setData] = useState(null); 
   const [loading, setLoading] = useState(true); 
+  const [countsMetaData, setCountsMetaData] = useState({
+    availability: 0,
+    rating: 0,
+    deliveryTime: 0,
+    deliveryCost: 0,
+    cuisines: [],
+    Area : "",
+  });
 
   const fetchRestaurants = async (postcode: string) => {
     setLoading(true); 
@@ -41,13 +49,13 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col">
-      <header className="text-white fixed top-0 left-0 w-full z-10 h-[4rem] flex items-center">
-        <Header postcode={postcode} setPostcode={setPostcode} />
+      <header className="text-white fixed top-0 left-0 w-full z-10 h-[4rem] flex items-cente p-2">
+        <Header postcode={postcode} setPostcode={setPostcode} metaData={countsMetaData} />
       </header>
 
       <main className="flex-1 overflow-y-auto mt-[4rem] mb-[4rem]">
         {data?.restaurants?.length > 0 ? (
-          <Body data={data.restaurants} />
+          <Body data={data.restaurants} metaData={data.metaData} setCountsMetaData={setCountsMetaData} />
         ) : (
           <div className="flex items-center justify-center h-full">
             <p className="text-xl font-bold text-gray-700">No restaurants found for the selected postcode.</p>

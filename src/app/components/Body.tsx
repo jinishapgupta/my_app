@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Cards from "./RestaurantCards/Cards";
 
 interface BodyProps {
-  filters: any,
+  filters: any;
   data: any;
+  metaData: { area: string }; // Added metaData type with area
+  setCountsMetaData: (countsMetaData: any) => void;
 }
 interface filtersProps {
   availability: boolean;
@@ -13,11 +15,40 @@ interface filtersProps {
   cuisines: string[];
 }
 
-export default function Body({ data, filters }: BodyProps) {
+export default function Body({ data, filters, metaData, setCountsMetaData }: BodyProps) {
+  useEffect(() => {
+    const countsMetaData = {
+      area: metaData.area, // Include area from metaData
+      availability: data.filter(
+        (restaurant: any) => restaurant.availability?.delivery?.isOpen
+      ).length,
+      rating: data.reduce(
+        (acc: number, restaurant: any) => acc + (restaurant.rating?.starRating || 0),
+        0
+      ) / data.length,
+      deliveryTime: Math.min(
+        ...data.map(
+          (restaurant: any) =>
+            restaurant.availability?.delivery?.etaMinutes?.rangeUpper || Infinity
+        )
+      ),
+      deliveryCost: Math.min(
+        ...data.map((restaurant: any) => restaurant.filters?.deliveryCost || Infinity)
+      ),
+      cuisines: Array.from(
+        new Set(
+          data.flatMap((restaurant: any) => restaurant.filters?.cuisines || [])
+        )
+      ),
+    };
+
+    setCountsMetaData(countsMetaData);
+  }, [data, metaData, setCountsMetaData]); // Added metaData to dependency array
+
   const restaurants = data
     .filter((restaurant: any) => {
       if (!filters || Object.keys(filters).length === 0) {
-        return true; 
+        return true;
       }
       const restaurantFilters = restaurant.filters as filtersProps;
       const availability = restaurant.availability?.delivery?.isOpen || false;
@@ -40,23 +71,19 @@ export default function Body({ data, filters }: BodyProps) {
       );
     })
     .sort((a: any, b: any) => {
-    
-  
-      
       const aAvailability = a.availability?.delivery?.isOpen || false;
       const bAvailability = b.availability?.delivery?.isOpen || false;
       const aStarRating = a.rating?.starRating || 0;
       const bStarRating = b.rating?.starRating || 0;
 
       if (bAvailability === aAvailability) {
-        return bStarRating - aStarRating; 
+        return bStarRating - aStarRating;
       }
-      return bAvailability ? 1 : -1; 
+      return bAvailability ? 1 : -1;
     })
-    .slice(0, 10); 
+    .slice(0, 10);
 
-
- return (
+  return (
     <div className="flex-1 flex items-center justify-center">
       <Cards restaurants={restaurants} />
     </div>

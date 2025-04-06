@@ -1,11 +1,20 @@
 import React from "react";
+import { LocationOn } from "@mui/icons-material";
 
 interface HeaderProps {
   postcode: string;
   setPostcode: React.Dispatch<React.SetStateAction<string>>;
+  metaData: {
+    area: string;
+    availability: number;
+    cuisines: any[];
+    deliveryCost: number;
+    deliveryTime: number;
+    rating: number;
+  };
 }
 
-export default function Header({ postcode, setPostcode }: HeaderProps) {
+export default function Header({ postcode, setPostcode, metaData }: HeaderProps) {
   const postcodes = [
     "CT1 2EH",
     "BS1 4DJ",
@@ -31,23 +40,30 @@ export default function Header({ postcode, setPostcode }: HeaderProps) {
   };
 
   return (
-    <header className="text-orange-300 p-4 flex justify-between items-center">
-      <div className="w-7/10 text-left">
-        <h1 className="text-2xl font-bold mb-2">FoodieExpress</h1>
-        <p className="text-sm">Find restaurants near you!</p>
+    <header className="bg-white px-6 py-3 flex flex-row items-center justify-between w-full  ">
+      {/* Logo and Meta Data */}
+      <div className="flex flex-col">
+        <div className="text-orange-500 font-bold text-2xl sm:text-3xl tracking-tight">
+          🍴 FoodieExpress
+        </div>
+        <p className="text-gray-500 text-sm mt-1">
+          {metaData.area} • {metaData.availability - 1} restaurants available
+        </p>
       </div>
 
-      <div className="w-3/10 flex items-center gap-2">
+      {/* Dropdown with Icon */}
+      <div className="flex items-center bg-gray-50 rounded-md px-3 py-1 hover:bg-gray-100 transition-colors">
+        <LocationOn className="text-gray-400 mr-2" sx={{ fontSize: 20 }} />
         <select
           value={postcode}
           onChange={handleSelectChange}
-          className="p-2 border border-orange-300 rounded text-black w-full"
+          className="bg-transparent text-gray-700 text-sm font-medium focus:outline-none cursor-pointer"
         >
-          <option value="" disabled>
-            Select a postcode
+          <option value="" disabled className="text-gray-500">
+            Select location
           </option>
           {postcodes.map((code) => (
-            <option key={code} value={code}>
+            <option key={code} value={code} className="text-gray-700 bg-white">
               {code}
             </option>
           ))}
