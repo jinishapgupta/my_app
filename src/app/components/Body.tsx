@@ -15,6 +15,9 @@ interface BodyProps {
 export default function Body({ data, filters, metaData, setCountsMetaData }: BodyProps) {
   const [showMap, setShowMap] = useState(false);
 
+
+  console.log("Filters in Body:", filters);
+
   useEffect(() => {
     const countsMetaData = {
       area: metaData.area,
@@ -49,9 +52,11 @@ export default function Body({ data, filters, metaData, setCountsMetaData }: Bod
       if (!filters || Object.keys(filters).length === 0) {
         return true;
       }
-      const restaurantFilters = restaurant.filters;
+      const restaurantFilters = filters;
       const availability = restaurant.availability?.delivery?.isOpen || false;
       const starRating = restaurantFilters.rating || 0;
+
+      console.log('filter cousins:', restaurant.cuisines);
 
       return (
         (filters.availability ? availability : true) &&
@@ -60,12 +65,12 @@ export default function Body({ data, filters, metaData, setCountsMetaData }: Bod
           ? restaurant.availability?.delivery?.etaMinutes?.rangeUpper <= filters.deliveryTime
           : true) &&
         (filters.deliveryCost
-          ? restaurantFilters.deliveryCost <= filters.deliveryCost
+          ? restaurant.deliveryCost <= filters.deliveryCost
           : true) &&
         (filters.cuisines.length > 0
-          ? restaurantFilters.cuisines.some((cuisine: string) =>
-              filters.cuisines.includes(cuisine)
-            )
+          ? restaurant.cuisines.some((cuisine: { uniqueName: string }) =>
+          filters.cuisines.includes(cuisine.uniqueName)
+        )
           : true)
       );
     })

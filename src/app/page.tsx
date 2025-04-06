@@ -19,14 +19,16 @@ export default function Home() {
 
 
   const [countsMetaData, setCountsMetaData] = useState({
-    availability: 0,
-    rating: 0,
-    deliveryTime: 0,
-    deliveryCost: 0,
+    availability: null,
+    rating: null,
+    deliveryTime: null,
+    deliveryCost: null,
     cuisines: [],
     Area : "",
   });
 
+  useEffect(() => {
+  } , [filters]);
   const fetchRestaurants = async (postcode: string) => {
     setLoading(true); 
     try {
@@ -37,7 +39,6 @@ export default function Home() {
       const json = await response.json();
       setFilterData(json?.filters);
       setData(json);
-      console.log("API Response:", json);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -47,7 +48,6 @@ export default function Home() {
 
   useEffect(() => {
     fetchRestaurants(postcode);
-    console.log("Postcode changed:", postcode);
   }, [postcode]);
 
 
@@ -69,7 +69,7 @@ export default function Home() {
 
       <main className="flex-1 overflow-y-auto mt-[4rem] mb-[4rem]">
         {data?.restaurants?.length > 0 ? (
-          <Body data={data.restaurants} metaData={data.metaData} setCountsMetaData={setCountsMetaData} />
+          <Body data={data.restaurants} filters={filters} metaData={data.metaData} setCountsMetaData={setCountsMetaData} />
         ) : (
           <div className="flex items-center justify-center h-full">
             <p className="text-xl font-bold text-gray-700">No restaurants found for the selected postcode.</p>
@@ -78,8 +78,8 @@ export default function Home() {
       </main>
 
       <footer className="text-white fixed bottom-0 left-0 w-full z-10 h-[4rem] flex items-center">
-        <Footer data={data} filterData={filterData} setFilters={setFilters} />
-      </footer>
+        <Footer data={data} filterData={filterData} setFilterData={setFilters} />
+      </footer                                                                                                            >
     </div>
   );
 }
