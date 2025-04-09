@@ -87,6 +87,10 @@ export default function Body({ data, filters, metaData, setCountsMetaData }: Bod
     })
     .slice(0, 10);
 
+  const sortedRestaurants = filters.sortFunction 
+    ? [...restaurants].sort(filters.sortFunction)
+    : restaurants;
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
       <button
@@ -96,9 +100,9 @@ export default function Body({ data, filters, metaData, setCountsMetaData }: Bod
         {showMap ? "Show Cards" : "Show Map"}
       </button>
       {showMap ? (
-        <MapView restaurants={restaurants} />
+        <MapView restaurants={sortedRestaurants} />
       ) : (
-        <Cards restaurants={restaurants} />
+        <Cards restaurants={sortedRestaurants} />
       )}
     </div>
   );

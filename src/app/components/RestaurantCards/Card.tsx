@@ -13,7 +13,7 @@ interface Restaurant {
   address: { firstLine: string; city: string; postalCode: string };
   logoUrl: string;
   deliveryCost: number;
-  deliveryEtaMinutes: { rangeLower: number; rangeUpper: number };
+  deliveryEtaMinutes: { rangeLower: number; rangeUpper: number } | null;
 }
 
 export default function Card({ restaurant }: { restaurant: Restaurant }) {
@@ -114,7 +114,11 @@ export default function Card({ restaurant }: { restaurant: Restaurant }) {
 
           <Chip
             icon={<AccessTimeIcon sx={{ fontSize: 14 }} />} // Smaller icon
-            label={`${restaurant.deliveryEtaMinutes.rangeLower}-${restaurant.deliveryEtaMinutes.rangeUpper} mins`}
+            label={
+              restaurant.deliveryEtaMinutes
+                ? `${restaurant.deliveryEtaMinutes.rangeLower}-${restaurant.deliveryEtaMinutes.rangeUpper} mins`
+                : "N/A" // Fallback label if deliveryEtaMinutes is null or undefined
+            }
             size="small"
             sx={{
               backgroundColor: "#f0f0f0",
