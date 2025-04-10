@@ -41,7 +41,6 @@ export default function Header({ postcode, setPostcode, metaData }: HeaderProps)
 
   return (
     <header className="bg-white px-6 py-3 flex flex-row items-center justify-between w-full  ">
-      {/* Logo and Meta Data */}
       <div className="flex flex-col">
         <div className="text-orange-500 font-bold text-2xl sm:text-3xl tracking-tight">
           🍴 FoodieExpress
@@ -51,7 +50,6 @@ export default function Header({ postcode, setPostcode, metaData }: HeaderProps)
         </p>
       </div>
 
-      {/* Dropdown with Icon */}
       <div className="flex items-center bg-gray-50 rounded-md px-3 py-1 hover:bg-gray-100 transition-colors">
         <LocationOn className="text-gray-400 mr-2" sx={{ fontSize: 20 }} />
         <select

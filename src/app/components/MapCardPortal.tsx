@@ -1,4 +1,3 @@
-// components/MapCardPortal.tsx
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 

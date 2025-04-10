@@ -20,7 +20,6 @@ interface FooterProps {
 export default function Footer({ filterData, setFilterData }: FooterProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   
-  // Organize filters into categories
   const filterCategories = {
     cuisines: {
       title: "Cuisines",
@@ -136,7 +135,6 @@ export default function Footer({ filterData, setFilterData }: FooterProps) {
           </div>
         ))}
 
-        {/* Active Filters Display */}
         <div className="flex gap-2">
           {Object.entries(filterData).map(([key, value]: [string, any]) => {
             if (Array.isArray(value) && value.length > 0) {

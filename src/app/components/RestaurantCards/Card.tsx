@@ -1,9 +1,8 @@
 import React from "react";
 import { Card as MuiCard, CardContent, CardMedia, Typography, Box, Chip } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping"; 
-import AccessTimeIcon from "@mui/icons-material/AccessTime"; 
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 interface Restaurant {
   id: string;
@@ -24,22 +23,22 @@ export default function Card({ restaurant }: { restaurant: Restaurant }) {
   return (
     <MuiCard
       sx={{
-        maxWidth: 200, // Reduced width for compactness
+        maxWidth: 200,
         borderRadius: 2,
-        boxShadow: 2, // Slightly lighter shadow for a cleaner look
+        boxShadow: 2,
         position: "relative",
         overflow: "hidden",
-        padding: "8px", // Added padding for overall spacing
+        padding: "8px",
       }}
     >
       <CardMedia
         component="img"
-        height="100" // Reduced height for compactness
+        height="100"
         image={restaurant.logoUrl}
         alt={restaurant.name}
         sx={{
           objectFit: "contain",
-          padding: "4px", // Reduced padding
+          padding: "4px",
         }}
       />
 
@@ -56,23 +55,23 @@ export default function Card({ restaurant }: { restaurant: Restaurant }) {
           rel="noopener noreferrer"
           style={{ textDecoration: "none", color: "#98aba9" }}
         >
-          <LocationOnIcon sx={{ fontSize: 18 }} /> {/* Adjusted icon size */}
+          <LocationOnIcon sx={{ fontSize: 18 }} />
         </a>
       </Box>
 
       <CardContent
         sx={{
-          padding: "8px 4px", // Reduced padding for compactness
+          padding: "8px 4px",
           display: "flex",
           flexDirection: "column",
-          gap: 0.5, // Reduced gap between elements
+          gap: 0.5,
         }}
       >
         <Typography
           variant="subtitle1"
           component="div"
           sx={{
-            fontSize: "0.85rem", // Slightly smaller font size
+            fontSize: "0.85rem",
             fontWeight: "bold",
             whiteSpace: "nowrap",
             overflow: "hidden",
@@ -90,10 +89,10 @@ export default function Card({ restaurant }: { restaurant: Restaurant }) {
               color="primary"
               size="small"
               sx={{
-                borderRadius: "10px", // Slightly smaller border radius
-                fontSize: "0.6rem", // Smaller font size
-                padding: "0px 4px", // Compact padding
-                height: "16px", // Reduced height
+                borderRadius: "10px",
+                fontSize: "0.6rem",
+                padding: "0px 4px",
+                height: "16px",
               }}
             />
           ))}
@@ -101,44 +100,55 @@ export default function Card({ restaurant }: { restaurant: Restaurant }) {
 
         <Box sx={{ display: "flex", gap: 0.5, mt: 0.5 }}>
           <Chip
-            icon={<LocalShippingIcon sx={{ fontSize: 14 }} />} // Smaller icon
+            icon={<LocalShippingIcon sx={{ fontSize: 14 }} />}
             label={`£${restaurant.deliveryCost.toFixed(2)}`}
             size="small"
             sx={{
               backgroundColor: "#f0f0f0",
               color: "#333",
-              fontSize: "0.7rem", // Smaller font size
+              fontSize: "0.7rem",
               fontWeight: 500,
             }}
           />
 
           <Chip
-            icon={<AccessTimeIcon sx={{ fontSize: 14 }} />} // Smaller icon
+            icon={<AccessTimeIcon sx={{ fontSize: 14 }} />}
             label={
               restaurant.deliveryEtaMinutes
                 ? `${restaurant.deliveryEtaMinutes.rangeLower}-${restaurant.deliveryEtaMinutes.rangeUpper} mins`
-                : "N/A" // Fallback label if deliveryEtaMinutes is null or undefined
+                : "N/A"
             }
             size="small"
             sx={{
               backgroundColor: "#f0f0f0",
               color: "#333",
-              fontSize: "0.7rem", // Smaller font size
+              fontSize: "0.7rem",
               fontWeight: 500,
             }}
           />
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.3, mt: 0.5 }}>
-          {[...Array(5)].map((_, index) => (
-            <StarIcon
-              key={index}
-              sx={{
-                fontSize: 14, // Smaller star size
-                color: index < restaurant.rating.starRating ? "#FFD700" : "#E0E0E0",
-              }}
-            />
-          ))}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.3,
+            mt: 0.5,
+          }}
+        >
+          <Chip
+            label={`${restaurant.rating.starRating.toFixed(1)} / 5`}
+            size="small"
+            sx={{
+              backgroundColor: "#FFECB3", 
+              color: "#757575", 
+              fontSize: "0.8rem",
+              fontWeight: "bold",
+              borderRadius: "16px", 
+              padding: "0 6px",
+              height: "20px",
+            }}
+          />
         </Box>
       </CardContent>
     </MuiCard>
